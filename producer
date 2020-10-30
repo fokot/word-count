@@ -1,11 +1,25 @@
 #!/bin/bash
 
-echo aaa0
-echo aaa1
-echo aaa2
-echo aaa3
-echo aaa3
-echo aaa2
-echo aaa2
-echo aaa1
-echo aaa3
+echo '{ "event_type": "baz", "data": "lorem", "timestamp": 1604082980 }'
+echo '{ "event_type": "bar", "data": "lorem", "timestamp": 1604082980 }'
+echo '{ "event_type": "baz", "data": "dorem", "timestamp": 1604082980 }'
+echo '{ "event_type": "baz", "data": "xorem", "timestamp": 1604082980 }'
+echo '{ "event_type": "bar", "data": "lorem", "timestamp": 1604082980 }'
+echo '{ "event_type": "baz", "data": "lorem", "timestamp": 1604082980 }'
+echo '{ "event_type": "baz", "data": "dorem", "timestamp": 1604082980 }'
+echo '{ "event_type": "baz", "data": "dorem", "timestamp": 1604082980 }'
+echo 'asdflkhjjasdfkhjasjdlkf'
+echo '{ "event_type": "foo", "data": "lorem", "timestamp": 1604082980 }'
+echo '{ "event_type": "foo", "data": "xorem", "timestamp": 1604082980 }'
+echo '{ "event_type": "baz", "data": "lorem", "timestamp": 1604082980 }'
+echo '{ "event_type": "baz", "data": "lorem", "timestamp": 1604082980 }'
+echo 'asdflkhjjasdfkhjasjdlkf'
+echo '{ "event_type": "baz", "data": "lorem", "timestamp": 1604082980 }'
+echo '{ "event_type": "baz", "data": "xorem", "timestamp": 1604082980 }'
+echo '{ "event_type": "foo", "data": "lorem", "timestamp": 1604082980 }'
+echo '{ "event_type": "baz", "data": "lorem", "timestamp": 1604082980 }'
+echo '{ "event_type": "baz", "data": "xorem", "timestamp": 1604082980 }'
+echo '{ "event_type": "baz", "data": "lorem", "timestamp": 1604082980 }'
+echo '{ "event_type": "bar", "data": "dorem", "timestamp": 1604082980 }'
+echo '{ "event_type": "baz", "data": "xorem", "timestamp": 1604082980 }'
+echo '{ "event_type": "baz", "data": "lorem", "timestamp": 1604082980 }'
