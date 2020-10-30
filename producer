@@ -1,0 +1,11 @@
+#!/bin/bash
+
+echo aaa0
+echo aaa1
+echo aaa2
+echo aaa3
+echo aaa3
+echo aaa2
+echo aaa2
+echo aaa1
+echo aaa3
