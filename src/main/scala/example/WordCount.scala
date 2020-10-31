@@ -33,8 +33,7 @@ object WordCount extends App {
 
   def updateCounterFromStdin(c: Ref[Counter]): ZIO[Console with Clock, Nothing, Nothing] =
     ZIO.effect(StdIn.readLine())
-      .map(io.circe.parser.parse).absolve
-      .map(_.as[Event]).absolve
+      .map(io.circe.parser.decode[Event]).absolve
       .tapBoth(e => putStrLn(s"ERROR: ${e.toString}"), e => putStrLn(s"PARSED: $e"))
       .flatMap(event => c.update(addEvent(event)))
       .orElse(updateCounterFromStdin(c)) *> updateCounterFromStdin(c)
