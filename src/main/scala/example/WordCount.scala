@@ -55,7 +55,7 @@ object WordCount extends App {
         .fork
       res <- Server.builder(new InetSocketAddress("0.0.0.0", 8080))
         .handleSome {
-          case req if req.method == GET && Some(req.uri.getPath).exists(p => p.isEmpty || p == "/") =>
+          case req if req.method == GET && Some(req.uri.getPath).forall(_ == "/") =>
             c.get.map(_.asJson).map(jsonResponse)
         }.serve.useForever.orDie
     } yield res
