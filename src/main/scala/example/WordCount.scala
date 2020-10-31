@@ -5,7 +5,7 @@ import zio.console.{Console, putStrLn}
 import java.net.InetSocketAddress
 import java.nio.charset.StandardCharsets
 
-import io.circe.Json
+import io.circe.{Encoder, Json}
 import io.circe.syntax._
 import io.circe.generic.auto._
 import uzhttp.Request.Method.GET
@@ -13,23 +13,16 @@ import uzhttp.server.Server
 import uzhttp.Response
 import zio.clock.Clock
 import zio.duration._
-import zio.{App, ZIO, Chunk}
+import zio.{App, Chunk, ZIO}
 
 import scala.io.StdIn
 
 object WordCount extends App {
 
-  type MapMap[A] = Map[String, Map[String, A]]
-  type Counter = MapMap[Chunk[Long]]
-
-  def mapValues[A](c: Counter, f: Chunk[Long] => A): MapMap[A] =
-    c.view.mapValues(_.view.mapValues(f).toMap).toMap
+  type Counter = Map[String, Map[String, Chunk[Long]]]
 
   def clearOld(from: Long)(c: Counter): Counter =
-    mapValues(c, _.filter(_ > from))
-
-  def count(c: Counter): MapMap[Int] =
-    mapValues(c, _.size)
+    c.view.mapValues(_.view.mapValues(_.filter(_ > from)).toMap).toMap
 
   def addEvent(event: Event)(c: Counter): Counter =
     c.updatedWith(event.event_type)(x =>
@@ -51,6 +44,8 @@ object WordCount extends App {
 
   val WINDOW = 10.seconds
 
+  implicit val chunkLongEncoder: Encoder[Chunk[Long]] = Encoder.instance(_.size.asJson)
+
   def run(args: List[String]): URIO[zio.ZEnv, ExitCode] =
   for {
       c <- Ref.make[Counter](Map.empty)
@@ -62,7 +57,7 @@ object WordCount extends App {
       res <- Server.builder(new InetSocketAddress("0.0.0.0", 8080))
         .handleSome {
           case req if req.method == GET && Some(req.uri.getPath).exists(p => p.isEmpty || p == "/") =>
-            c.get.map(count).map(_.asJson).map(jsonResponse)
+            c.get.map(_.asJson).map(jsonResponse)
         }.serve.useForever.orDie
     } yield res
 }
