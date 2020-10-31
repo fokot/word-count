@@ -38,11 +38,6 @@ object WordCount extends App {
 
   case class Event(event_type: String, data: String, timestamp: Long)
 
-  val readWriteTest: ZIO[Console, Throwable, Unit] =
-    ZIO.effect(StdIn.readLine()).flatMap(
-      l => ZIO.when(l != null)(putStrLn(l) *> readWriteTest)
-    )
-
   def updateCounterFromStdin(c: Ref[Counter]): ZIO[Console with Clock, Nothing, Nothing] =
     ZIO.effect(StdIn.readLine())
       .map(io.circe.parser.parse).absolve
@@ -66,7 +61,7 @@ object WordCount extends App {
         .fork
       res <- Server.builder(new InetSocketAddress("0.0.0.0", 8080))
         .handleSome {
-          case req if req.method == GET && (req.uri.isOpaque || req.uri.getPath.isEmpty || req.uri.getPath == "/") =>
+          case req if req.method == GET && Some(req.uri.getPath).exists(p => p.isEmpty || p == "/") =>
             c.get.map(count).map(_.asJson).map(jsonResponse)
         }.serve.useForever.orDie
     } yield res
