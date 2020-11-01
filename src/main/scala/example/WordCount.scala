@@ -36,7 +36,7 @@ object WordCount extends App {
       .map(io.circe.parser.decode[Event]).absolve
       .tapBoth(e => putStrLn(s"ERROR: ${e.toString}"), e => putStrLn(s"PARSED: $e"))
       .flatMap(event => c.update(addEvent(event)))
-      .orElse(updateCounterFromStdin(c)) *> updateCounterFromStdin(c)
+      .orElse(ZIO.unit) *> updateCounterFromStdin(c)
 
   def jsonResponse(json: Json): Response =
     Response.const(json.spaces4.getBytes(StandardCharsets.UTF_8), contentType = "application/json")
